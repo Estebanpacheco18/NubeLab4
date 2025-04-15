@@ -1,8 +1,16 @@
 const express = require('express');
 const router = express.Router();
 
-router.get('/', (req, res) => {
-  res.send('¡Bienvenido a la ruta de productos!');
-});
+module.exports = (db) => {
+  router.get('/', (req, res) => {
+    db.query('SELECT * FROM productos', (err, results) => {
+      if (err) {
+        res.status(500).send('Error al obtener productos');
+        return;
+      }
+      res.json(results);
+    });
+  });
 
-module.exports = router;
+  return router;
+};
